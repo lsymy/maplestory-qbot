@@ -1,3 +1,5 @@
 package config
 
-var LocalResourceAddress = "/mnt/e/go-pro/maplestory-qbot/resource/"
+var LocalResourceAddress = "/Users/lsymy/go_pro/bot/maplestory-qbot/resource"
+
+var LocalResourceHost = "http://192.168.31.189:8089/"

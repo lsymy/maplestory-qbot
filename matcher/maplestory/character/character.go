@@ -21,6 +21,8 @@ import (
 
 	"github.com/wcharczuk/go-chart/v2" //exposes "chart"
 	"github.com/wcharczuk/go-chart/v2/drawing"
+
+	"github.com/FloatTech/floatbox/web"
 )
 
 type Character struct {
@@ -279,7 +281,9 @@ func sendCharacterInfo(info CharacterData, ctx *zero.Ctx) {
 		fmt.Sprintf("%d", count)+"日均经验预计升级天数: "+fmt.Sprintf("%.2f天", estimateUpLevelDay),
 	)
 
-	if len(xValues) != 0 && len(yValues) != 0 {
+	roleImage, roleErr := web.GetData(info.CharacterImageURL)
+
+	if len(xValues) != 0 && len(yValues) != 0 && roleErr == nil {
 		graph := chart.Chart{
 			XAxis: chart.XAxis{
 				Name: "日期",
@@ -314,9 +318,9 @@ func sendCharacterInfo(info CharacterData, ctx *zero.Ctx) {
 			return
 		}
 
-		ctx.SendChain(message.Image(info.CharacterImageURL), characterInfo, message.ImageBytes(buffer.Bytes()))
+		ctx.SendChain(message.ImageBytes(roleImage), characterInfo, message.ImageBytes(buffer.Bytes()))
 	} else {
-		ctx.SendChain(message.Image(info.CharacterImageURL), characterInfo)
+		ctx.SendChain(message.ImageBytes(roleImage), characterInfo)
 	}
 
 }

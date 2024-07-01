@@ -12,7 +12,7 @@ func init() {
 		args := ctx.State["args"].(string)
 
 		if args == "小猪ping" {
-			ctx.SendChain(message.At(ctx.Event.UserID), message.Text("pong"))
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("pong1"))
 		}
 	})
 }

@@ -4,6 +4,7 @@ import (
 	"MSBot/config"
 	"MSBot/db"
 	rule "MSBot/rules"
+	"fmt"
 	"time"
 
 	zero "github.com/wdvxdr1123/ZeroBot"
@@ -97,10 +98,10 @@ func init() {
 
 	duration := 30 * time.Minute
 	engine.OnFullMatch("小猪ask提醒", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
-		ctx.SendChain(message.At(ctx.Event.UserID), message.Text("30分钟后将提醒你收菜，ask过程中进行切线、进商城等操作会导致奖励变为meso，建议在挂机和刷图时ask."))
+		ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("30分钟后将提醒你收菜，ask过程中进行切线、进商城等操作会导致奖励变为meso，建议在挂机和刷图时ask."))
 		time.AfterFunc(duration, func() {
 			// 在这里编写将消息发送给 QQ 的代码
-			ctx.SendChain(message.At(ctx.Event.UserID), message.Text("ask收菜!"))
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("ask收菜!"))
 		})
 	})
 
@@ -126,5 +127,6 @@ func init() {
 }
 
 func sendImage(ctx *zero.Ctx, image string) {
-	ctx.SendChain(message.Image(config.LocalResourceAddress + image))
+	fmt.Println(config.LocalResourceHost + "ms/" + image)
+	ctx.SendChain(message.Image(config.LocalResourceHost + "ms/" + image))
 }
