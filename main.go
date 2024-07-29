@@ -16,14 +16,14 @@ import (
 )
 
 func init() {
-}
-
-func main() {
 	res := db.InitDB()
 
 	if res != nil {
 		return
 	}
+}
+
+func main() {
 
 	imageFs := http.FileServer(http.Dir(config.LocalResourceAddress))
 	http.Handle("/", imageFs)

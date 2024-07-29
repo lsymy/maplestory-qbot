@@ -5,6 +5,8 @@ import (
 	"MSBot/db"
 	rule "MSBot/rules"
 	"fmt"
+	"log"
+	"strings"
 	"time"
 
 	zero "github.com/wdvxdr1123/ZeroBot"
@@ -39,7 +41,6 @@ var MsFullMatchKeywords = map[string]string{
 	"小猪神子问答":   "神子问答.png",
 	"小猪远征":     "远征.png",
 	"小猪远征技能":   "远征技能.png",
-	"小猪周日":     "周日.png",
 	"小猪dmt":    "dmt.png",
 	"小猪魔方":     "魔方.png",
 	"小猪远征攻略":   "远征攻略.png",
@@ -65,8 +66,72 @@ type maintenance_info struct {
 	detail string
 }
 
+func dbget() {
+	// engine := zero.New()
+	fmt.Println(2)
+
+	database := db.GetDB()
+	rows, err := database.Query("SELECT keyword, content FROM learn_content")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	// 创建一个 map 来存储查询结果
+	// keywordMap := make(map[string]string)
+
+	// // 遍历结果集
+	// for rows.Next() {
+	// 	var keyword, content string
+	// 	if err := rows.Scan(&keyword, &content); err != nil {
+	// 		fmt.Println("扫描失败:", err)
+	// 		return
+	// 	}
+	// 	// 将 keyword 和 content 放入 map 中
+	// 	keywordMap[keyword] = content
+	// }
+
+	// // 检查遍历过程中是否出现错误
+	// if err := rows.Err(); err != nil {
+	// 	fmt.Println("遍历结果集时发生错误:", err)
+	// 	return
+	// }
+
+	// // 打印结果
+	// fmt.Println("查询到的结果:", keywordMap)
+}
+
+type content struct {
+	id      int
+	keyword string
+	content string
+}
+
 func init() {
 	engine := zero.New()
+
+	engine.OnRegex(`小猪(.*)`).Handle(func(ctx *zero.Ctx) {
+		rematched := ctx.State["regex_matched"].([]string)
+		keyword := strings.ReplaceAll(rematched[1], " ", "")
+
+		database := db.GetDB()
+
+		fmt.Println(keyword)
+		// 查询要修改的记录
+		row := database.QueryRow("SELECT id, keyword, content FROM learn_content WHERE keyword = ?", keyword)
+		var info content
+		err := row.Scan(&info.id, &info.keyword, &info.content)
+		fmt.Println(info.content)
+		fmt.Println(info.keyword)
+
+		if err != nil {
+			// 不存在
+			fmt.Println("不存在")
+			return
+		}
+
+		ctx.SendChain(message.Image(config.LocalResourceHost + "ms/" + info.content))
+	})
 
 	for keyword, image := range MsFullMatchKeywords {
 		keyword := keyword
@@ -123,6 +188,10 @@ func init() {
 
 	engine.OnFullMatch("小猪黎明脸", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.Text("Greu vulture\nSkelosaurus\n[*]Skelosaurus\nAdvanced Knight A"))
+	})
+
+	engine.OnFullMatch("小猪幻影森林", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
+		ctx.SendChain(message.Image(config.LocalResourceHost+"ms/"+"幻影森林1.png"), message.Image(config.LocalResourceHost+"ms/"+"幻影森林2.png"))
 	})
 }
 

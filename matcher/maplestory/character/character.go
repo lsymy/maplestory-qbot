@@ -134,7 +134,7 @@ func init() {
 		}
 
 		if e == 2 {
-			ctx.SendChain(message.Text("没绑定吧！"))
+			ctx.SendChain(message.Text("解析 api json 失败, 确认请求站点是否正常"))
 			return
 		}
 
@@ -170,7 +170,7 @@ func init() {
 			}
 
 			if e == 2 {
-				ctx.SendChain(message.Text("没绑定吧！"))
+				ctx.SendChain(message.Text("解析 api json 失败, 确认请求站点是否正常"))
 				return
 			}
 
@@ -200,7 +200,7 @@ func characterSearch(characterName string) (CharacterData, int) {
 
 	var character Character
 	if err := json.NewDecoder(resp.Body).Decode(&character); err != nil {
-		fmt.Println("解析 JSON 失败:", err)
+		fmt.Println("解析 api JSON 失败:", err)
 		return CharacterData{}, 2
 	}
 

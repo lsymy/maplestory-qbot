@@ -8,6 +8,7 @@ import (
 
 	_ "MSBot/matcher/maplestory/character"
 	_ "MSBot/matcher/maplestory/help"
+	_ "MSBot/matcher/maplestory/learn"
 	_ "MSBot/matcher/maplestory/maintainer"
 
 	"fmt"

@@ -100,7 +100,7 @@ func saveImageForCQImage(cqstring string, filename string) (err error) {
 	url := cqstring[start:end]
 
 	fileName := filename + ".png"
-	downloadPath := config.LocalResourceAddress + "ms/"
+	downloadPath := config.LocalResourceAddress + "/ms/"
 
 	// 发起HTTP GET请求
 	resp, err := http.Get(url)
