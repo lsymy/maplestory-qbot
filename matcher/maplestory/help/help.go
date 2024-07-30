@@ -32,17 +32,14 @@ func init() {
 
 		database := db.GetDB()
 
-		fmt.Println(keyword)
-		// 查询要修改的记录
+		// 查询记录
 		row := database.QueryRow("SELECT id, keyword, content FROM learn_content WHERE keyword = ?", keyword)
 		var info content
 		err := row.Scan(&info.id, &info.keyword, &info.content)
-		fmt.Println(info.content)
-		fmt.Println(info.keyword)
 
 		if err != nil {
 			// 不存在
-			fmt.Println("不存在")
+			fmt.Println("不存在该词条")
 			return
 		}
 

@@ -105,6 +105,8 @@ func init() {
 
 		database := db.GetDB()
 
+		fmt.Println(ctx.Event.GroupID)
+
 		err := UpdateOrInsert(database, ctx.Event.UserID, characterName, ctx.Event.GroupID)
 		if err != nil {
 			ctx.SendChain(message.Text(err))
@@ -344,7 +346,7 @@ func UpdateOrInsert(db *sql.DB, qqid int64, character_name string, groupid int64
 		return err
 	default:
 		// 如果找到了记录，则执行更新操作
-		_, err := db.Exec("UPDATE character_qq SET character_name = ? WHERE qqid = ?", character_name, qqid)
+		_, err := db.Exec("UPDATE character_qq SET character_name = ?, from_group_id = ? WHERE qqid = ?", character_name, groupid, qqid)
 		if err != nil {
 			return err
 		}
