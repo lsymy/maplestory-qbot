@@ -66,6 +66,7 @@ type character_qq struct {
 	id             int
 	character_name string
 	qqid           int
+	from_group_id  int
 }
 
 func init() {
@@ -104,7 +105,7 @@ func init() {
 
 		database := db.GetDB()
 
-		err := UpdateOrInsert(database, ctx.Event.UserID, characterName)
+		err := UpdateOrInsert(database, ctx.Event.UserID, characterName, ctx.Event.GroupID)
 		if err != nil {
 			ctx.SendChain(message.Text(err))
 			return
@@ -326,7 +327,7 @@ func sendCharacterInfo(info CharacterData, ctx *zero.Ctx) {
 }
 
 // UpdateOrInsert 更新或插入数据
-func UpdateOrInsert(db *sql.DB, qqid int64, character_name string) error {
+func UpdateOrInsert(db *sql.DB, qqid int64, character_name string, groupid int64) error {
 	// 首先检查数据库中是否已经存在该记录
 	var existingValue string
 	err := db.QueryRow("SELECT qqid FROM character_qq WHERE qqid = ?", qqid).Scan(&existingValue)
@@ -334,7 +335,7 @@ func UpdateOrInsert(db *sql.DB, qqid int64, character_name string) error {
 	switch {
 	case err == sql.ErrNoRows:
 		// 如果没有找到记录，则执行插入操作
-		_, err := db.Exec("INSERT INTO character_qq (qqid, character_name) VALUES (?, ?)", qqid, character_name)
+		_, err := db.Exec("INSERT INTO character_qq (qqid, character_name, from_group_id) VALUES (?, ?, ?)", qqid, character_name, groupid)
 		if err != nil {
 			return err
 		}
