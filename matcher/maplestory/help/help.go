@@ -11,55 +11,6 @@ import (
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
 
-var MsFullMatchKeywords = map[string]string{
-	"小猪菜单":     "菜单.png",
-	"小猪菜单2":    "菜单2.png",
-	"小猪火花":     "火花.png",
-	"小猪毕业副手":   "毕业副手.png",
-	"小猪boss":   "boss.png",
-	"小猪link":   "link.png",
-	"小猪练级":     "lianji2.png",
-	"小猪练级2":    "lianji.png",
-	"小猪练级3":    "lianji3.png",
-	"小猪练级4":    "lianji4.png",
-	"小猪核心":     "核心.png",
-	"小猪超技":     "超技.png",
-	"小猪冒险家超技":  "冒险家超技.png",
-	"小猪骑士团超技":  "骑士团超技.png",
-	"小猪内潜":     "内潜.png",
-	"小猪新内潜":    "新职业内潜.png",
-	"小猪职业内潜":   "职业内潜.png",
-	"小猪三级link": "3jlink.png",
-	"小猪3级link": "3jlink.png",
-	"小猪角色卡":    "角色卡.png",
-	"小猪潜能":     "潜能.png",
-	"小猪潜能2":    "潜能2.png",
-	"小猪职业名称":   "职业名称.png",
-	"小猪564":    "564.png",
-	"小猪神子问答":   "神子问答.png",
-	"小猪远征":     "远征.png",
-	"小猪远征技能":   "远征技能.png",
-	"小猪周日":     "周日.png",
-	"小猪dmt":    "dmt.png",
-	"小猪魔方":     "魔方.png",
-	"小猪远征攻略":   "远征攻略.png",
-	"小猪周常":     "周常.png",
-	"小猪岛球":     "岛球.png",
-	"小猪怪怪卡":    "怪怪.png",
-	"小猪忍者城堡":   "忍者城堡.png",
-	"小猪au":     "au.png",
-	"小猪BOSS":   "BOSS2.png",
-	"小猪斗燃":     "斗燃.png",
-	"小猪刷图":     "刷图.png",
-	"小猪战斗":     "战斗.png",
-	"小猪100":    "100.png",
-	"小猪托德":     "托德.png",
-	"小猪装备":     "装备.png",
-	"小猪活动":     "活动.png",
-	"小猪buff":   "buff.png",
-	"小猪创世":     "chuangshi.png",
-}
-
 type maintenance_info struct {
 	id     int
 	detail string
@@ -68,32 +19,16 @@ type maintenance_info struct {
 func init() {
 	engine := zero.New()
 
-	for keyword, image := range MsFullMatchKeywords {
-		keyword := keyword
-		image := image
-		engine.OnFullMatch(keyword, rule.CheckRule).Handle(func(ctx *zero.Ctx) {
-			sendImage(ctx, image)
-		})
-	}
-
 	engine.OnFullMatch("小猪wiki", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
 		ctx.SendChain(message.Text("https://maplestory.fandom.com/wiki"))
 	})
 
-	engine.OnFullMatch("小猪联盟计算", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
-		ctx.SendChain(message.Text("https://xenogents.github.io/LegionSolver/"))
-	})
-
-	engine.OnFullMatch("小猪核心计算", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
-		ctx.SendChain(message.Text("https://soundmark.github.io/maple-nodes/"))
-	})
-
-	engine.OnFullMatch("小猪上星", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
-		ctx.SendChain(message.Text("https://brendonmay.github.io/starforceCalculator/"))
+	engine.OnFullMatch("小猪计算器", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
+		ctx.SendChain(message.Text("联盟计算器：https://xenogents.github.io/LegionSolver/" + "\n" + "核心计算器：https://soundmark.github.io/maple-nodes/" + "\n" + "上星计算器：https://brendonmay.github.io/starforceCalculator/" + "\n"))
 	})
 
 	engine.OnFullMatch("小猪航海", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
-		ctx.SendChain(message.Text("一图: 香水×2+肥皂×2" + "\n" + "三图: 优质皮+眼镜+肥皂×2 + 肥皂×4×6次"))
+		ctx.SendChain(message.Text("一图(15): 香水×2+肥皂×2" + "\n" + "三图(12): 优质皮+眼镜+肥皂×2 + 肥皂×4×6次"))
 	})
 
 	duration := 30 * time.Minute
