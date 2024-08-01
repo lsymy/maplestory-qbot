@@ -118,12 +118,13 @@ func init() {
 
 	engine.OnFullMatch("izhu", rule.CheckRule).Handle(func(ctx *zero.Ctx) {
 		database := db.GetDB()
-
+		fmt.Println(ctx.Event.UserID)
 		sqlStr := "select * from character_qq where qqid = ?;"
 		row := database.QueryRow(sqlStr, ctx.Event.UserID)
 		var user character_qq
-		row.Scan(&user.id, &user.character_name, &user.qqid)
+		row.Scan(&user.id, &user.character_name, &user.qqid, &user.from_group_id)
 
+		fmt.Println(user.character_name)
 		// 查询
 		info, e := characterSearch(user.character_name)
 		if e == 0 {
@@ -187,6 +188,8 @@ func init() {
 func characterSearch(characterName string) (CharacterData, int) {
 	fmt.Println("角色请求开始")
 
+	fmt.Println(characterName)
+	fmt.Println("https://api.maplestory.gg/v2/public/character/gms/" + characterName)
 	req, err := http.NewRequest("GET", "https://api.maplestory.gg/v2/public/character/gms/"+characterName, nil)
 	if err != nil {
 		fmt.Println("角色请求失败")
